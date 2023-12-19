@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { defer, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node"
-import { Await, useLoaderData, useNavigation } from "@remix-run/react"
+import { Await, useLoaderData } from "@remix-run/react"
 import { PokemonClient } from "pokenode-ts"
 
 import { CardSkeleton } from "~/components/card-skeleton"
@@ -36,11 +36,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const { page, pokemons, hasPrevPage, hasNextPage } =
     useLoaderData<typeof loader>()
-  const navigation = useNavigation()
-
-  if (navigation.state === "loading") {
-    return <CardSkeleton />
-  }
 
   return (
     <Suspense fallback={<CardSkeleton />}>
