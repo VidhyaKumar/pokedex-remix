@@ -1,8 +1,8 @@
 import { Suspense } from "react"
 import { defer, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node"
-import { Await, useLoaderData, useNavigation } from "@remix-run/react"
-import { PokemonClient } from "pokenode-ts"
+import { Await, useLoaderData } from "@remix-run/react"
 
+import { getPokemons } from "~/lib/pokedex"
 import { CardSkeleton } from "~/components/card-skeleton"
 import { Pagination } from "~/components/pagination"
 import { Pokemon } from "~/components/pokemon"
@@ -18,17 +18,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const pageParam = url.searchParams.get("page")
   const page = pageParam ? parseInt(pageParam) : 1
-  const offset = (page - 1) * 10
-  const P = new PokemonClient()
-  const pokemonList = await P.listPokemons(offset, 10)
-  const pokemons = Promise.all(
-    pokemonList.results.map((pokemon) => P.getPokemonByName(pokemon.name))
-  )
+  const { hasNextPage, hasPrevPage, pokemons } = await getPokemons(page)
 
   return defer({
     page,
-    hasPrevPage: !!pokemonList.previous,
-    hasNextPage: !!pokemonList.next,
+    hasPrevPage,
+    hasNextPage,
     pokemons,
   })
 }
@@ -36,11 +31,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const { page, pokemons, hasPrevPage, hasNextPage } =
     useLoaderData<typeof loader>()
-  const navigation = useNavigation()
-
-  if (navigation.state !== "idle") {
-    return <CardSkeleton />
-  }
 
   return (
     <Suspense fallback={<CardSkeleton />}>

@@ -21,7 +21,7 @@ export function Pagination({
       <Button variant="secondary" className="min-w-[105px]" asChild>
         <Link
           to={prevPage === 1 ? "/" : `/?page=${prevPage}`}
-          prefetch="intent"
+          prefetch="render"
           aria-disabled={!hasPrevPage}
           className="aria-[disabled='true']:pointer-events-none aria-[disabled='true']:opacity-50"
         >
@@ -31,7 +31,7 @@ export function Pagination({
       <Button className="min-w-[105px]" asChild>
         <Link
           to={`/?page=${nextPage}`}
-          prefetch="intent"
+          prefetch="render"
           aria-disabled={!hasNextPage}
           className="aria-[disabled='true']:pointer-events-none aria-[disabled='true']:opacity-50"
         >
