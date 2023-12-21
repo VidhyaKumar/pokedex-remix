@@ -35,12 +35,12 @@ export function Pokemon({ pokemon }: PokemonProps) {
     >
       <div className="flex items-center justify-center flex-1 w-full p-4">
         <img
-          loading="lazy"
+          loading={pokemon.id === 1 ? "eager" : "lazy"}
           decoding="async"
           className="object-contain object-center"
           alt={pokemon.name}
-          width={120}
-          height={120}
+          width={128}
+          height={128}
           src={
             pokemon.sprites.other?.["official-artwork"].front_default
               ? `https://pokedex.imgix.net/${pokemon.id}.png?auto=format&w=256&q=75&fit=max`
@@ -48,8 +48,8 @@ export function Pokemon({ pokemon }: PokemonProps) {
           }
           srcSet={
             pokemon.sprites.other?.["official-artwork"].front_default
-              ? `https://pokedex.imgix.net/${pokemon.id}.png?auto=format&w=128&q=75&fit=max&dpr=1 1x,
-                https://pokedex.imgix.net/${pokemon.id}.png?auto=format&w=256&q=75&fit=max&dpr=2 2x,`
+              ? `https://pokedex.imgix.net/${pokemon.id}.png?auto=format&w=128&q=75&fit=max 1x,
+                https://pokedex.imgix.net/${pokemon.id}.png?auto=format&w=256&q=75&fit=max 2x,`
               : "/images/pokeball.svg"
           }
         />
